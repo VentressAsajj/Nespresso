@@ -8,6 +8,7 @@
 #include <SparkFunSerialGraphicLCD.h>
 #include <SoftwareSerial.h>
 #include <SparkFunISL29125.h>
+#include "Global.h"
 /*
  * Para conexion de dispostivos i²C
  */

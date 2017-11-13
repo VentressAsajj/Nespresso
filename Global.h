@@ -1,5 +1,6 @@
-#include "Global.h"
-
+#include <SparkFunISL29125.h>
+// Declare sensor object
+SFE_ISL29125 rgbSensor;
 int ledState = LOW;
 unsigned long previousMillis = 0;
 const long interval = 4000;
