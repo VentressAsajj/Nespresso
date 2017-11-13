@@ -3,7 +3,7 @@
  * sacado de https://www.instructables.com/id/DIY-Nespresso-Capsule-Detector/
  * con modificaciones porque no funcionama
  * @nuria_pp
- * 
+ * https://github.com/VentressAsajj/Nespresso
  */
 #include <SparkFunSerialGraphicLCD.h>
 #include <SoftwareSerial.h>
