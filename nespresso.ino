@@ -1,4 +1,16 @@
+/*
+ * Nespresso
+ * sacado de https://www.instructables.com/id/DIY-Nespresso-Capsule-Detector/
+ * con modificaciones porque no funcionama
+ * @nuria_pp
+ * 
+ */
+#include <SparkFunSerialGraphicLCD.h>
+#include <SoftwareSerial.h>
 #include <SparkFunISL29125.h>
+/*
+ * Para conexion de dispostivos i²C
+ */
 #include <Wire.h>
 
 // Declare sensor object
