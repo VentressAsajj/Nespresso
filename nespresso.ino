@@ -48,9 +48,9 @@ void setup() {
   serlcdNSS.begin(9600); 
   serlcd.begin();   
   serlcd.setPosition(1,2);
-  serlcd.print("Hola Nuria"); /* mañana dura */
+  serlcd.print("Hola Nuria"); 
   serlcd.setPosition(2,2);
-  serlcd.print("dia duro,huh?"); /* eh! */ 
+  serlcd.print("dia duro,huh?");  
   delay(5000);
       
   // Initialize the rgbSensor
@@ -85,7 +85,8 @@ void loop() {
   int blue = rgbSensor.readBlue();
 
   int cosi[3] = {229, 389, 329};
-  int dulsao[3] = {142, 253, 191};
+  //int dulsao[3] = {142, 253, 191};
+  int dulsao[3] = {6, 253, 191};
   int roma[3] = {83, 196, 177};
   int livanto[3] = {188, 299, 187};
   int vivalto_lungo [3] = {134, 294, 449};
@@ -94,18 +95,16 @@ void loop() {
   int kazaar[3] = {5, 10, 5};
   int volluto[3] = {263, 421, 248};
 
-
   int thresh = 20 ;
   
-
-      Serial.print("Red:");
-      Serial.print(rgbSensor.readRed());
-      Serial.print("    Green:");
-      Serial.print(rgbSensor.readGreen());
-      Serial.print("    Blue:");
-      Serial.print(rgbSensor.readBlue());
-      Serial.println();
-      delay(3000);
+  Serial.print("Red:");
+  Serial.print(rgbSensor.readRed());
+  Serial.print("    Green:");
+  Serial.print(rgbSensor.readGreen());
+  Serial.print("    Blue:");
+  Serial.print(rgbSensor.readBlue());
+  Serial.println();
+  delay(3000);
   
   if (detect) {
 
@@ -227,6 +226,7 @@ void loop() {
 
     //Kazaar
     if (abs(red - kazaar[0]) < thresh && abs(green - kazaar[1]) < thresh && abs(blue - kazaar[2]) < thresh ) {
+      Serial.print("Kazaar");
       serlcd.clear();
       serlcd.setPosition(1,2);
       serlcd.print("Kazaar");
@@ -234,9 +234,9 @@ void loop() {
       delay(4000);
       serlcd.clear();
       serlcd.setPosition(1,2);
-      serlcd.print("Intensidad 12"); /* mañana dura */
+      serlcd.print("Intensidad 12"); /* mañana con sueño */
       serlcd.setPosition(2,3);
-      serlcd.print("mucho sueño"); /* eh! */ 
+      serlcd.print("mucho sueño");  
       delay(4000);
       serlcd.clear();
     }
