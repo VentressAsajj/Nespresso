@@ -15,3 +15,4 @@ Material usado:
       LD1117 voltage regulator 3.3v
       Capacitor Ceramic 0.1uF
       Electrolytic Decoupling Capacitor - 10uF/25V
+
