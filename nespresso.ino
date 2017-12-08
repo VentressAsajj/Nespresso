@@ -1,21 +1,34 @@
-/*
+/* 
  * Nespresso
  * sacado de https://www.instructables.com/id/DIY-Nespresso-Capsule-Detector/
  * con modificaciones porque no funcionama
  * @nuria_pp
  * https://github.com/VentressAsajj/Nespresso
  */
-#include <SparkFunSerialGraphicLCD.h>
+/* Librerias */
+
+/* LCD */
+#include "SerLCD.h"
 #include <SoftwareSerial.h>
+
+/* RGB */
 #include <SparkFunISL29125.h>
-#include "Global.h"
-/*
- * Para conexion de dispostivos i²C
- */
+/* Para conexion de dispostivos i²C */
 #include <Wire.h>
 
-// Declare sensor object
+/* Definicion de pines */
+#define SERLCD_PIN_RX  2
+
+/* Definicion de variables globales y objetos*/
+uint16_t rgbSensorR,rgbSensorG,rgbSensorB;
+
+/* Declaracion objento de sensor RGB */
 SFE_ISL29125 rgbSensor;
+
+/* Declaracion del objeto pantalla 16x2 LCD */
+SoftwareSerial serlcdNSS(0,SERLCD_PIN_RX);
+SerLCD serlcd(serlcdNSS);
+
 
 int ledState = LOW;
 unsigned long previousMillis = 0;
@@ -32,6 +45,14 @@ void setup() {
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
 
+  serlcdNSS.begin(9600); 
+  serlcd.begin();   
+  serlcd.setPosition(1,2);
+  serlcd.print("Hola Nuria"); /* mañana dura */
+  serlcd.setPosition(2,2);
+  serlcd.print("dia duro,huh?"); /* eh! */ 
+  delay(5000);
+      
   // Initialize the rgbSensor
   bool rgbSensorInitStatus = rgbSensor.init();
   if (rgbSensorInitStatus)
@@ -69,12 +90,13 @@ void loop() {
   int livanto[3] = {188, 299, 187};
   int vivalto_lungo [3] = {134, 294, 449};
   int bukeela_lungo[3] = {330, 452, 319};
-  int kazaar[3] = {60, 165, 180};
+  //int kazaar[3] = {60, 165, 180};
+  int kazaar[3] = {5, 10, 5};
   int volluto[3] = {263, 421, 248};
 
 
   int thresh = 20 ;
-  /*
+  
 
       Serial.print("Red:");
       Serial.print(rgbSensor.readRed());
@@ -83,8 +105,8 @@ void loop() {
       Serial.print("    Blue:");
       Serial.print(rgbSensor.readBlue());
       Serial.println();
-      delay(500);
-  */
+      delay(3000);
+  
   if (detect) {
 
     //Cosi
@@ -92,15 +114,15 @@ void loop() {
       Serial.println("Cosi");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cosi");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 4/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 40ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Fruity");
       delay(2500);
       serlcd.clear();
@@ -112,15 +134,15 @@ void loop() {
       Serial.println("Dulsao");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Dulsao");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 4/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 40ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Sweet Cereal");
       delay(2500);
       serlcd.clear();
@@ -131,15 +153,15 @@ void loop() {
       Serial.println("Roma");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Roma");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 8/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 25ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Woody");
       delay(2500);
       serlcd.clear();
@@ -151,15 +173,15 @@ void loop() {
       Serial.println("Livanto");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Livanto");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 6/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 40ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Caramel");
       delay(2500);
       serlcd.clear();
@@ -170,15 +192,15 @@ void loop() {
       Serial.println("Vivalto Lungo");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Vivalto Lungo");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 4/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 110ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Floral,Roasted");
       delay(2500);
       serlcd.clear();
@@ -189,15 +211,15 @@ void loop() {
       Serial.println("Bukeela Lungo");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Bukeela Lungo");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 3/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 110ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Wild, Floral");
       delay(2500);
       serlcd.clear(); 
@@ -205,13 +227,16 @@ void loop() {
 
     //Kazaar
     if (abs(red - kazaar[0]) < thresh && abs(green - kazaar[1]) < thresh && abs(blue - kazaar[2]) < thresh ) {
-      Serial.println("Kazaar");
-      serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
-      serlcd.print("Buenos dias Nuria "); /* mañana dura */
-      serlcd.selectLine(2);
-      serlcd.print("duro dia, huh ?  "); /* eh! */ 
+      serlcd.setPosition(1,2);
+      serlcd.print("Kazaar");
+      serlcd.setBrightness(28);
+      delay(4000);
+      serlcd.clear();
+      serlcd.setPosition(1,2);
+      serlcd.print("Intensidad 12"); /* mañana dura */
+      serlcd.setPosition(2,3);
+      serlcd.print("mucho sueño"); /* eh! */ 
       delay(4000);
       serlcd.clear();
     }
@@ -221,15 +246,15 @@ void loop() {
       Serial.println("Volluto");
       serlcd.setBrightness(28);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Volluto");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Intensity: 4/10");
       delay(2500);
       serlcd.clear();
-      serlcd.selectLine(1);
+      serlcd.setPosition(1,2);
       serlcd.print("Cup Size: 40ml");
-      serlcd.selectLine(2);
+      serlcd.setPosition(2,3);
       serlcd.print("Cereal Fruity");
       delay(2500);
       serlcd.clear();
