@@ -1,7 +1,7 @@
 /* 
  * Nespresso
  * sacado de https://www.instructables.com/id/DIY-Nespresso-Capsule-Detector/
- * con modificaciones porque no funcionama
+ * con modificaciones porque no funcionaba
  * @nuria_pp
  * https://github.com/VentressAsajj/Nespresso
  */
