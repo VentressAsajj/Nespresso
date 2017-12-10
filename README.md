@@ -1,6 +1,7 @@
 # Nespresso Arduino Pro Mini
 Este proyecto es una copia del publicado en https://www.instructables.com/id/DIY-Nespresso-Capsule-Detector/ <p>
-Hecho para pasar el tiempo y porque cuando tienes las capsulas sueltas al final no sabes la intensidad del café. Sinceramente la razón principal es la primera. :D
+Hecho para pasar el tiempo y porque cuando tienes las capsulas sueltas al final no sabes la intensidad del café. Sinceramente la razón principal es la primera. :D Enjoy! <p>
+Nota: Sacrilegio usar leche con el café.
 
 # Material usado 
 * Arduino Pro Mini 328 - 5V/16MHz
