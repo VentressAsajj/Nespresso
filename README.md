@@ -4,3 +4,4 @@ Hecho para pasar el tiempo y porque cuando tienes las capsulas sueltas al final 
 
 Se realiza modificación del circuito con respecto al que planteaban los de Instructables, puesto que se producía un corto.
 Se sube la foto del circuito, cicuito.jpg.
+<img src="circuito.jpg" />
