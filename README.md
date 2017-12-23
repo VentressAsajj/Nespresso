@@ -37,4 +37,5 @@ Se sube la foto del circuito, cicuito.jpg.
 Nota: Los colores indicados en esta parte no coinciden con la imagen.
 ## LCD y SensorRGB en caja impresa en 3D
 Es muy importante que el color de la impresión sea negra para que no deje pasar la luz. Usar filamento translúcido.
-<img src="" />
+<img src="IMG_0287.jpg" />
+<img src="IMG_0288.jpg" />
