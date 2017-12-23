@@ -30,7 +30,7 @@ Se sube la foto del circuito, cicuito.jpg.
     RX  LCD --> Pin 2 Arduino <p>
 
 ### Sensor RGB ISL29125 
-    GND SensorRGB    --> GND Arduino ( azul ) <p>
-    Vcc SensorRGB 3v --> LV de LogicLevelConverter LV ( rojo )<p>
-    SCL SensorRGB    --> LV2 de LogicLevelConverter ( amarillo ) <p>
-    SDA SensorRGB    --> LV1 de LogicLevelConverter ( verde ) <p>
+    GND (azul) SensorRGB      --> GND Arduino<p>
+    Vcc (rojo) SensorRGB 3.3v --> LV de LogicLevelConverter LV<p>
+    SDA (verde) SensorRGB     --> LV2 de LogicLevelConverter<p>
+    SDL (amarillo) SensorRGB  --> LV1 de LogicLevelConverter<p>
