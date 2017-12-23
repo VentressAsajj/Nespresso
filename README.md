@@ -48,7 +48,7 @@ Nota: Los colores indicados en esta parte no coinciden con la imagen.
 
 LM3940IT: http://www.ti.com/lit/ds/symlink/lm3940.pdf
     Con la parta plana hacia atrás, Vin 5v, Gdn, Vout 3.3v
-    <img src="IMG_0289.jpg" />
+    <img src="IMG_0290.jpg" />
     
 ## LCD y SensorRGB en caja impresa en 3D
 Es muy importante que el color de la impresión sea negra para que no deje pasar la luz. Usar filamento translúcido.
