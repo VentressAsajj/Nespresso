@@ -10,7 +10,7 @@ Nota: Sacrilegio usar leche con el café.
 * Logic Level Converter Bi-Directional SparkFun
 * SparkFun FTDI Basic Breakout - 5V
 * DC Barrel Jack Adapter
-* LD1117 voltage regulator 3.3v
+* LD1117 voltage regulator 3.3v. Ellos recomiendan este, yo he puesto LM3940IT. Cuidado con las patas, son diferentes
 * Capacitor Ceramic 0.1uF
 * Electrolytic Decoupling Capacitor - 10uF/25V
 * cablecitos y demás...
@@ -35,6 +35,21 @@ Se sube la foto del circuito, cicuito.jpg.
     SDA (verde) SensorRGB     --> LV2 de LogicLevelConverter<p>
     SDL (amarillo) SensorRGB  --> LV1 de LogicLevelConverter<p>
 Nota: Los colores indicados en esta parte no coinciden con la imagen.
+### LogicLevelConverter HV
+    LogicLevelConverter HV1 --> A4 ArduinoProMini5v
+    LogicLevelConverter HV2 --> A5 ArduinoProMini5v
+    LogicLevelConverter HV  --> Vcc
+    LogicLevelConverter GDN --> GDN
+    LogicLevelConverter LV1 --> SDL SensorRGB
+    LogicLevelConverter LV2 --> SDA SensorRGB
+    LogicLevelConverter LV  --> Vcc SensorRGB y Salida 3v del  Connect LD11173.3v
+### Connect LM3940IT
+**Nota: LD11173.3v Ellos recomiendan este y las patas son diferentes GDN, Vout, Vin.                https://www.sparkfun.com/datasheets/Components/LD1117V33.pdf
+
+LM3940IT: http://www.ti.com/lit/ds/symlink/lm3940.pdf
+    Con la parta plana hacia atrás, Vin 5v, Gdn, Vout 3.3v
+    <img src="IMG_0289.jpg" />
+    
 ## LCD y SensorRGB en caja impresa en 3D
 Es muy importante que el color de la impresión sea negra para que no deje pasar la luz. Usar filamento translúcido.
 <img src="IMG_0287.jpg" />
