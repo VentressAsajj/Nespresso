@@ -34,3 +34,4 @@ Se sube la foto del circuito, cicuito.jpg.
     Vcc (rojo) SensorRGB 3.3v --> LV de LogicLevelConverter LV<p>
     SDA (verde) SensorRGB     --> LV2 de LogicLevelConverter<p>
     SDL (amarillo) SensorRGB  --> LV1 de LogicLevelConverter<p>
+Nota: Los colores indicados en esta parte no coinciden con la imagen.
