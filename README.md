@@ -21,3 +21,16 @@ Se realiza modificación del circuito con respecto al que planteaban los de Inst
 Se sube la foto del circuito, cicuito.jpg.
 <p>
 <img src="circuito.jpg" />
+
+
+# Conexiones
+## LCD 2x16
+    GDN LCD --> GND Arduino<p>
+    Vcc LCD --> Vcc Arduino <p>
+    RX  LCD --> Pin 2 Arduino <p>
+
+### Sensor RGB ISL29125 
+    GND SensorRGB    --> GND Arduino ( azul ) <p>
+    Vcc SensorRGB 3v --> LV de LogicLevelConverter LV ( rojo )<p>
+    SCL SensorRGB    --> LV2 de LogicLevelConverter ( amarillo ) <p>
+    SDA SensorRGB    --> LV1 de LogicLevelConverter ( verde ) <p>
