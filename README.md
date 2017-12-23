@@ -35,3 +35,6 @@ Se sube la foto del circuito, cicuito.jpg.
     SDA (verde) SensorRGB     --> LV2 de LogicLevelConverter<p>
     SDL (amarillo) SensorRGB  --> LV1 de LogicLevelConverter<p>
 Nota: Los colores indicados en esta parte no coinciden con la imagen.
+## LCD y SensorRGB en caja impresa en 3D
+Es muy importante que el color de la impresión sea negra para que no deje pasar la luz. Usar filamento translúcido.
+<img src="" />
