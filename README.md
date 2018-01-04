@@ -54,3 +54,6 @@ LM3940IT: http://www.ti.com/lit/ds/symlink/lm3940.pdf
 Es muy importante que el color de la impresión sea negra para que no deje pasar la luz. Usar filamento translúcido.
 <img src="IMG_0287.jpg" />
 <img src="IMG_0288.jpg" />
+
+## Arduino pro-mini
+<img src="arduino_pro-mini.png" />
