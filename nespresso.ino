@@ -19,7 +19,16 @@
    * evitan falsos positivos. Los valores para PRST pueden ser 1,2,4 u 8.
    */
 
- 
+ /*
+  * Probrema a la hora de detectar colores similares. Por diseño de la "caja" donde
+  * van los sensores y el arduino, no hay espacio para meter otro led. Se puede hacer
+  * otro agujero o retocar el diseño3D, (pereza, va a ser que no!)
+  * Soluciones aportadas por la comunidad:
+  * 
+  *   @javierfpanadero: Sumar los colores y ver la diferencia que hay entre ellos.
+  *   @@Nicky69es: Hacer dos lecturas, una con el led encendido y otra con el led
+  *   con memor intensidad. En una de las dos dará diferente. Eso espero :D
+  */
  
 /* Librerias */
 
@@ -45,12 +54,45 @@ SFE_ISL29125 RGB_Sensor;
 SoftwareSerial serlcdNSS(0,SERLCD_PIN_RX);
 SerLCD serlcd(serlcdNSS);
 
-
+/*
+ * Definicion de constantes o variables
+ */
 int ledState = LOW;
-unsigned long previousMillis = 0;
-const long interval = 4000;
-bool detect = 0;
+const int pinLed = 9;
 
+unsigned long previousMillis = 0;
+//const long interval = 4000;
+const long interval = 6000;
+bool detect = 0;
+int capsulasDetectadas = 0;
+int thresh;  
+
+int red;
+int green;
+int blue;
+
+/*
+ * Valores RGB iniciales sin detectar capsula:
+ *    R:2181 G:3897 B:2707
+*/
+ 
+int kazaar[3]          = {1720,4920,3600};    //****
+int arpeggio[3]        = {1800,4400,3450};    //****
+int ristretto[3]       = {1530,4220,2655};    //**
+int capriccio[3]       = {2080,5500,3240};    //***
+int roma[3]            = {2300,5650,3660};    //**
+int indriya[3]         = {3770,9010,4800};    //*
+int rosabaya[3]        = {9380,21170,12250};  //*
+int volutto[3]         = {9470,17800,6430};   //*
+int dulsao[3]          = {12700,28950,14000}; //
+int livanto[3]         = {4410,7580,3450};    //**
+int cosi[3]            = {6650,15100,8310};   //**
+int dharkan[3]         = {2290,6845,4730};    //***
+int linizio_lungo[3]   = {9950,14570,4770};   //***
+int bukeela_lungo[3]   = {12150,22240,10100};  //
+int fortissio_lungo[3] = {2725,8800,5790};    //**
+int vivalto_lungo[3]   = {4410,16590,16350};  //*
+int envivo_lungo[3]    = {5250,7850,3750};    //***
 
 /* Configure */
 void setup() {
@@ -58,186 +100,426 @@ void setup() {
   /* Inicializacion del monitor serie para control de errores y demas */
   Serial.begin(115200);
   Serial.println("Iniciando programa");
-  /* declare pins  RGB */
-  pinMode(8, OUTPUT); 
-  pinMode(9, OUTPUT);
-
+  // led 9/A0 es el blanco
+  pinMode(pinLed,OUTPUT);
+  
   serlcdNSS.begin(9600); 
   serlcd.begin();   
   serlcd.setPosition(1,0);
   serlcd.print("Buenos dias nena"); 
   serlcd.setPosition(2,0);
   serlcd.print("estas estupenda");  
-  delay(4000);
+  delay(2000);
   /* Detectando sensor RGB */    
   if (RGB_Sensor.init()){
-    Serial.println("Inicializacion correcta del sensor RBG");
-    //RGB_sensor.config(CFG1_10KLUX, CFG2_IR_ADJUST_HIGH, CFG3_INT_PRST4);
+    Serial.println("Inicializacion correcta del sensor RGB");
+    RGB_Sensor.config(CFG1_MODE_RGB | CFG1_375LUX, CFG2_IR_ADJUST_LOW, CFG3_NO_INT);
   }  
   else {
-    Serial.println("Error iniciando sensor RBG");
+    Serial.println("Error iniciando sensor RGB");
     serlcd.clear();
     serlcd.setPosition(1,0);
-    serlcd.print("Error sensor RBG"); 
+    serlcd.print("Error sensor RGB"); 
     delay(4000);
   }
 }
 
 /* principal */
 void loop() {
-
-  
-  unsigned long currentMillis = millis(); 
-
-  /* leemos valores del sensor, 16bits integers*/
-  unsigned int red   = RGB_Sensor.readRed();
-  unsigned int green = RGB_Sensor.readGreen();
-  unsigned int blue  = RGB_Sensor.readBlue();
-  
-  Serial.print("Rojo:  "  ); Serial.print(red,    DEC);
-  Serial.print("  Verde: "); Serial.print(green,  DEC);
-  Serial.print("  Azul:  "); Serial.println(blue, DEC);
-  Serial.println();
-  delay(2500);
+ 
+  unsigned long currentMillis = millis();
+   
+  if(capsulasDetectadas > 1){
+    Serial.print("Capsulas detectadas ");
+    Serial.println(capsulasDetectadas);
+    analogWrite(pinLed,25); // 
+    detectarCapsulas();
+    capsulasDetectadas = 0;
+  }
 
   if (blue <= 1) {
-    //ledState = HIGH;
-    ledState = LOW;
-    digitalWrite(8, HIGH);
-    digitalWrite(9, HIGH);
+    ledState = HIGH;
+    analogWrite(pinLed,255);
     detect = 1;
+    capsulasDetectadas = 0;
   }
-  
-  Serial.print("Milisegundos: "); Serial.println(currentMillis);
-  Serial.print("currentMillis - previousMillis "); Serial.println(currentMillis - previousMillis);
-  Serial.print("Interval ");Serial.print(interval);
-  Serial.print("  ledState ");Serial.println(ledState);
-  delay(4000);
   
   if (currentMillis - previousMillis >= interval && ledState == HIGH) {
-    // save the last time you blinked the LED
+    // guardamos la ultima vez que parpadeo el led
     previousMillis = currentMillis;
-    digitalWrite(8, LOW);
-    digitalWrite(9, LOW);
+    analogWrite(pinLed,0);
     detect = 0;
-    serlcd.setBrightness(1);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("No hay capsulas");
+    serlcd.setBrightness(0);
+    capsulasDetectadas = 0;
   }
+  /* leemos valores del sensor, 16bits integers*/
+  red   = RGB_Sensor.readRed();
+  green = RGB_Sensor.readGreen();
+  blue  = RGB_Sensor.readBlue();
 
-  /* Valores RGB para cada cafe */
-  /*
-  int cosi[3] = {229, 389, 329};
-  int dulsao[3] = {142, 253, 191};
-  int roma[3] = {83, 196, 177};
-  int livanto[3] = {188, 299, 187};
-  int vivalto_lungo [3] = {134, 294, 449};
-  int bukeela_lungo[3] = {330, 452, 319};
-  int kazaar[3] = {60, 165, 180};
-  int volluto[3] = {263, 421, 248};
-  */
+  /* rango de medicion */
+  thresh = 300;
+  if (detect) {
+    detectarCapsulas();
+  }
+}
 
-  int kazaar[3] = {65, 34, 67};
-  int dulsao[3] = {103, 45, 96};
-  int bukeela_lungo[3] = {101, 44, 94};
-  int linizio_lungo[3] = {72, 33, 64};
+void detectarCapsulas(){
 
-  /* intentamos ajustar mas */
-  /*int thresh = 20 ;*/
-  int thresh = 2;
   
   /* comentar cuando ya se tenga los valores RGB para cada cafe*/
   /* Serial.println(red, DEC|HEX) */
-  /*
-  Serial.print("Rojo:  "); Serial.print(RGB_Sensor.readRed(),  DEC);
-  Serial.print("  Verde: "); Serial.print(RGB_Sensor.readGreen(),DEC);
-  Serial.print("  Azul:  "); Serial.println(RGB_Sensor.readBlue(), DEC);
-  Serial.println();
-  delay(2500);
-  */
-  /*
-  Serial.print("Rojo:" );Serial.println(RGB_Sensor.readRed());
-  Serial.print("Verde:");Serial.println(RGB_Sensor.readGreen());
-  Serial.print("Azul:" );Serial.println(RGB_Sensor.readBlue());
-  Serial.println();
-  delay(3000);
-  */
-  Serial.print("Detectado: ");Serial.println(detect);
   
-  if (detect) {
-    /* Kazaar */
-    if (abs(red - kazaar[0]) < thresh && abs(green - kazaar[1]) < thresh && abs(blue - kazaar[2]) < thresh ) {
-      Serial.print("Kazaar");
-      serlcd.setBrightness(28);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("Kazaar");
-      serlcd.setPosition(2,0);
-      serlcd.print("Intensidad: 10");
-      delay(3000);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("hoy va a ser");
-      serlcd.setPosition(2,0);
-      serlcd.print("un dia duro");
-      delay(3000);
-      serlcd.clear();
-    }
-    /* Dulsao */
-    if (abs(red - dulsao[0]) < thresh && abs(green - dulsao[1]) < thresh && abs(blue - dulsao[2]) < thresh ) {
-      Serial.println("Dulsao");
-      serlcd.setBrightness(28);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("Dulsao");
-      serlcd.setPosition(2,0);
-      serlcd.print("Intensidad: 4");
-      delay(3000);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("para tomar eso");
-      serlcd.setPosition(2,0);
-      serlcd.print("mejor agua");
-      delay(3000);
-      serlcd.clear();
-    }
-    /* Bukeela Lungo */
-    if (abs(red - bukeela_lungo[0]) < thresh && abs(green - bukeela_lungo[1]) < thresh && abs(blue - bukeela_lungo[2]) < thresh ) {
-      Serial.print("Bukeela Lungo");
-      serlcd.setBrightness(28);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("Bukeela Lungo");
-      serlcd.setPosition(2,0);
-      serlcd.print("Intensidad 3");
-      delay(3000);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("esto no es cafe");
-      serlcd.setPosition(2,0);
-      serlcd.print("vete a dormir");
-      delay(3000);
-      serlcd.clear();
-    }
-    /* Linizio Lungo */
-    if (abs(red - linizio_lungo[0]) < thresh && abs(green - linizio_lungo[1]) < thresh && abs(blue - linizio_lungo[2]) < thresh ) {
-      Serial.print("Linizio Lungo");
-      serlcd.setBrightness(28);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("Linizio Lungo");
-      serlcd.setPosition(2,0);
-      serlcd.print("Intensidad 4");
-      delay(3000);
-      serlcd.clear();
-      serlcd.setPosition(1,0);
-      serlcd.print("Tipo cafe:");
-      serlcd.setPosition(2,0);
-      serlcd.print("Arabica");
-      delay(3000);
-      serlcd.clear();
-    }
-
-
-
+  Serial.print("R: ");  Serial.print(red,  DEC);
+  Serial.print(" G: "); Serial.print(green,DEC);
+  Serial.print(" B: "); Serial.print(blue, DEC);
+  Serial.println();
+  /* Kazaar */
+  if (abs(red - kazaar[0]) < thresh && abs(green - kazaar[1]) < thresh && abs(blue - kazaar[2]) < thresh ) {
+    Serial.println("Kazaar");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("kazaar");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 12");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 25ml 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* Ristretto */
+  if (abs(red - ristretto[0]) < thresh && abs(green - ristretto[1]) < thresh && abs(blue - ristretto[2]) < thresh ) {
+    Serial.println("Ristretto");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("ristretto");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 10");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 25ml 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* arpeggio */
+  if (abs(red - arpeggio[0]) < thresh && abs(green - arpeggio[1]) < thresh && abs(blue - arpeggio[2]) < thresh ) {
+    Serial.println("Arpeggio");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("arpeggio");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 9");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 25ml 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso, cremoso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* capriccio */
+  if (abs(red - capriccio[0]) < thresh && abs(green - capriccio[1]) < thresh && abs(blue - capriccio[2]) < thresh ) {
+    Serial.println("Capriccio");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Capriccio");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 5");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* roma */
+  if (abs(red - roma[0]) < thresh && abs(green - roma[1]) < thresh && abs(blue - roma[2]) < thresh ) {
+    Serial.println("Roma");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("roma");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 8");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 25ml 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* Indriya */
+  if (abs(red - indriya[0]) < thresh && abs(green - indriya[1]) < thresh && abs(blue - indriya[2]) < thresh ) {
+    Serial.println("Indriya");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("indriya");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 10");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 25ml 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* Dulsao */
+  if (abs(red - dulsao[0]) < thresh && abs(green - dulsao[1]) < thresh && abs(blue - dulsao[2]) < thresh ) {
+    Serial.println("Dulsao");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("dulsao");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 4");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("equilibrado");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* rosabaya */
+  if (abs(red - rosabaya[0]) < thresh && abs(green - rosabaya[1]) < thresh && abs(blue - rosabaya[2]) < thresh ) {
+    Serial.println("Rosabaya");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("rosabaya");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 6");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("afrutado");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* volutto */
+  if (abs(red - volutto[0]) < thresh && abs(green - volutto[1]) < thresh && abs(blue - volutto[2]) < thresh ) {
+    Serial.println("Volutto");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("volutto");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 4");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 110ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("equilibrado");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* vivalto_lungo */
+  if (abs(red - vivalto_lungo[0]) < thresh && abs(green - vivalto_lungo[1]) < thresh && abs(blue - vivalto_lungo[2]) < thresh ) {
+    Serial.println("Vivalto Lungo");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("vivalto lungo");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 4");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 110ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("afrutado");
+    delay(1000);
+    serlcd.clear();
+  }
+  /* Bukeela Lungo */
+  if (abs(red - bukeela_lungo[0]) < thresh && abs(green - bukeela_lungo[1]) < thresh && abs(blue - bukeela_lungo[2]) < thresh ) {
+    Serial.println("bukeela lungo");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("bukeela lungo");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 3");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 110ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("Ethiopia");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* livanto */
+  if (abs(red - livanto[0]) < thresh && abs(green - livanto[1]) < thresh && abs(blue - livanto[2]) < thresh ) {
+    Serial.println("livanto");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("livanto");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 6");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("caramelizado");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* cosi */
+  if (abs(red - cosi[0]) < thresh && abs(green - cosi[1]) < thresh && abs(blue - cosi[2]) < thresh ) {
+    Serial.println("cosi");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("cosi");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 4");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("afrutado");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* dharkan */
+  if (abs(red - dharkan[0]) < thresh && abs(green - dharkan[1]) < thresh && abs(blue - dharkan[2]) < thresh ) {
+    Serial.println("dharkan");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("dharkan");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 11");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 25ml 40ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* fortissio_lungo */
+  if (abs(red - fortissio_lungo[0]) < thresh && abs(green - fortissio_lungo[1]) < thresh && abs(blue - fortissio_lungo[2]) < thresh ) {
+    Serial.println("fortissio_lugo");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("fortissio lugo");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 8");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 110ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* envivo_lungo */
+  if (abs(red - envivo_lungo[0]) < thresh && abs(green - envivo_lungo[1]) < thresh && abs(blue - envivo_lungo[2]) < thresh ) {
+    Serial.println("envivo_lungo");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("envivo lungo");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 9");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 110ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("intenso");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
+  }
+  /* linizio_lungo */
+  if (abs(red - linizio_lungo[0]) < thresh && abs(green - linizio_lungo[1]) < thresh && abs(blue - linizio_lungo[2]) < thresh ) {
+    Serial.println("linizio_lungo");
+    serlcd.setBrightness(28);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("linizio lungo");
+    serlcd.setPosition(2,0);
+    serlcd.print("Intensidad 4");
+    delay(1000);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("Espresso 110ml");
+    serlcd.setPosition(2,0);
+    serlcd.print("equilibrado");
+    delay(1000);
+    serlcd.clear();
+    ++capsulasDetectadas;
   }
 }
+
+void incrementaBrillo(){
+  /*   
+  for (int brillo = 0; brillo <= 255; brillo += 5){
+    analogWrite(pinLed,brillo);
+    serlcd.clear();
+    serlcd.setPosition(1,0);
+    serlcd.print("brillo");
+    serlcd.setPosition(2,0);
+    serlcd.print(brillo);
+    red   = RGB_Sensor.readRed();
+    green = RGB_Sensor.readGreen();
+    blue  = RGB_Sensor.readBlue();
+    Serial.print("R: ");  Serial.print(red,  DEC);
+    Serial.print(" G: "); Serial.print(green,DEC);
+    Serial.print(" B: "); Serial.print(blue, DEC);
+    Serial.println();
+    delay(2000);  
+  }
+*/
+}
+
 
