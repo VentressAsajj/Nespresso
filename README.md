@@ -32,16 +32,16 @@ Se sube la foto del circuito, cicuito.jpg.
 ### Sensor RGB ISL29125 
     GND (azul) SensorRGB      --> GND Arduino<p>
     Vcc (rojo) SensorRGB 3.3v --> LV de LogicLevelConverter LV<p>
-    SDA (verde) SensorRGB     --> LV2 de LogicLevelConverter<p>
-    SDL (amarillo) SensorRGB  --> LV1 de LogicLevelConverter<p>
+    SDA (verde) SensorRGB     --> LV1 de LogicLevelConverter<p>
+    SCL (amarillo) SensorRGB  --> LV2 de LogicLevelConverter<p>
 Nota: Los colores indicados en esta parte no coinciden con la imagen.
 ### LogicLevelConverter HV
     LogicLevelConverter HV1 --> A4 ArduinoProMini5v
     LogicLevelConverter HV2 --> A5 ArduinoProMini5v
     LogicLevelConverter HV  --> Vcc
     LogicLevelConverter GDN --> GDN
-    LogicLevelConverter LV1 --> SDL SensorRGB
-    LogicLevelConverter LV2 --> SDA SensorRGB
+    LogicLevelConverter LV2 --> SCL SensorRGB
+    LogicLevelConverter LV1 --> SDA SensorRGB
     LogicLevelConverter LV  --> Vcc SensorRGB y Salida 3v del  Connect LD11173.3v
 ### Connect LM3940IT
 **Nota: LD11173.3v Ellos recomiendan este y las patas son diferentes GDN, Vout, Vin.                https://www.sparkfun.com/datasheets/Components/LD1117V33.pdf
