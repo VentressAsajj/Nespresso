@@ -57,3 +57,7 @@ Es muy importante que el color de la impresión sea negra para que no deje pasar
 
 ## Arduino pro-mini
 <img src="arduino_pro-mini.png" />
+
+## Led blanco
+Se añade un led blanco con resistencia de 330k para iluminar la cápsula.
+<img src="imagenesComponentes/led.jpg" />
