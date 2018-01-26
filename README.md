@@ -20,7 +20,7 @@ Nota: Sacrilegio usar leche con el café.
 Se realiza modificación del circuito con respecto al que planteaban los de Instructables, puesto que se producía un corto.
 Se sube la foto del circuito, cicuito.jpg.
 <p>
-<img src="circuito.jpg" />
+<img src="imagenesComponentes/circuito.jpg" />
 
 
 # Conexiones
@@ -48,16 +48,17 @@ Nota: Los colores indicados en esta parte no coinciden con la imagen.
 
 LM3940IT: http://www.ti.com/lit/ds/symlink/lm3940.pdf
     Con la parta plana hacia atrás, Vin 5v, Gdn, Vout 3.3v
-    <img src="IMG_0292.jpg" />
+    <img src="imagenesComponentes/IMG_0292.jpg" />
     
 ## LCD y SensorRGB en caja impresa en 3D
 Es muy importante que el color de la impresión sea negra para que no deje pasar la luz. Usar filamento translúcido.
-<img src="IMG_0287.jpg" />
-<img src="IMG_0288.jpg" />
-
-## Arduino pro-mini
-<img src="arduino_pro-mini.png" />
+<img src="imagenesComponentes/IMG_0287.jpg" />
+<img src="imagenesComponentes/IMG_0288.jpg" />
 
 ## Led blanco
 Se añade un led blanco con resistencia de 330k para iluminar la cápsula.
 <img src="imagenesComponentes/led.jpg" />
+
+## Arduino pro-mini
+<img src="arduino_pro-mini.png" />
+
