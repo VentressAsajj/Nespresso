@@ -25,9 +25,9 @@ Se sube la foto del circuito, cicuito.jpg.
 
 # Conexiones
 ## LCD 2x16
-    GDN LCD --> GND Arduino<p>
-    Vcc LCD --> Vcc Arduino <p>
-    RX  LCD --> Pin 2 Arduino <p>
+    GDN LCD --> GND Arduino
+    Vcc LCD --> Vcc Arduino
+    RX  LCD --> Pin 2 Arduino
 
 ### Sensor RGB ISL29125 
     GND (azul) SensorRGB      --> GND Arduino<p>
