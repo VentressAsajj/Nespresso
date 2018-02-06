@@ -31,9 +31,9 @@ Se sube la foto del circuito, cicuito.jpg.
 
 ### Sensor RGB ISL29125 
     GND (azul) SensorRGB      --> GND Arduino<p>
-    Vcc (rojo) SensorRGB 3.3v --> LV de LogicLevelConverter LV<p>
-    SDA (verde) SensorRGB     --> LV1 de LogicLevelConverter<p>
-    SCL (amarillo) SensorRGB  --> LV2 de LogicLevelConverter<p>
+    Vcc (rojo) SensorRGB 3.3v --> LV de LogicLevelConverter LV
+    SDA (verde) SensorRGB     --> LV1 de LogicLevelConverter
+    SCL (amarillo) SensorRGB  --> LV2 de LogicLevelConverter
 Nota: Los colores indicados en esta parte no coinciden con la imagen.
 ### LogicLevelConverter HV
     LogicLevelConverter HV1 --> A4 ArduinoProMini5v
